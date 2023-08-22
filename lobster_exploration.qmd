@@ -1,0 +1,82 @@
+---
+title: "lobster_exploration"
+format: html
+editor: visual
+---
+
+```{r}
+library(ggplot2)
+library(tidyverse)
+library(janitor)
+library(dplyr)
+```
+
+```{r}
+#initially had 10 col 6309 rows 
+my_data <- read_csv(here::here("data", "LobsterAbundance.csv"), na = c("-99999", "")) %>%
+  clean_names() %>%
+  uncount(count)
+```
+
+```{r}
+mean_count <- my_data %>% 
+  group_by(site, year) %>%
+  summarize(mean_body = mean(size_mm, na.rm = TRUE), count = n())
+```
+
+```{r}
+ggplot(data = mean_count, aes(x = year, y = count)) +
+  geom_point()
+
+```
+
+```{r}
+legal_lobster <- my_data %>%
+  filter(year == "2020")
+
+#count of lobserts observed at each site 
+```
+
+```{r}
+#find count of lobsers observed at each site only using site as groupingj above and below legal limit 
+
+legal_lobster %>%
+  group_by(site) %>%
+  summarize(mean_body_mass = mean(body_mass_g, na.rm = TRUE))
+
+
+```
+
+```{r}
+abovebelow_legal <- legal_lobster %>% 
+  mutate(legal = case_when(
+    size_mm >= 79.76 ~ "yes", 
+    size_mm < 79.76 ~ "no")) %>%
+      group_by(site, legal) %>%
+      summarise(n())
+
+view(abovebelow_legal)
+```
+
+```{r}
+ggplot(data = abovebelow_legal, aes(x = site, y = count)) +
+  geom_col(position = "fill")
+```
+
+\
+
+count(number of rows by species and group) (44 counts)
+
+penguins%\>%
+
+count(species, island)
+
+penguins_counts %\>%
+
+uncount(nn each combo in count it elongated so each count is in count row so take mean using eahcindividual lobsert) (creates 44 rows)
+
+```{r}
+
+```
+
+ncount \<- freq to case
